@@ -1,0 +1,32 @@
+services:
+  jenkins-demo-app:
+    build: .
+    depends_on:
+      - mysql-db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - jenkins-demo-network
+    ports:
+      - "8080:8080"
+
+  mysql-db:
+    image: mysql
+    container_name: jenkins-demo-db
+    restart: always
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: docker
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - jenkins-demo-network
+
+#  jenkins:
+#    image: jenkins/jenkins
+
+networks:
+  jenkins-demo-network:
+    name: jenkins-demo-network
+    driver: bridge
